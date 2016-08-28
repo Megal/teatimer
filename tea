@@ -3,17 +3,24 @@ repeat () {
 	if [ $2 -ge 1 ]; then seq -f "$1" -s '' $2; fi
 }
 
-minutes="$1"
-seconds=$((minutes*60))
-for ((t=0;t<seconds;++t)) do
-	remM=$(( (seconds-t) / 60 ));
-	remS=$(( (seconds - remM*60) - t ));
-	progress=$(( (t+1) * 50 / seconds ));
+print_progress () {
+	passed=$1
+	total=$2
+	remM=$(( (total-passed) / 60 ));
+	remS=$(( (total - remM*60) - passed ));
+	progress=$(( passed * 50 / total ));
 	echo -ne '  progress: [';
 	repeat "#" $progress;
 	repeat " " $((50-progress));
 	echo -ne '] T-'$remM':'`printf "%02d" $remS`'\r';
+}
+
+minutes="$1"
+seconds=$((minutes*60))
+for ((t=0;t<seconds;++t)) do
+	print_progress $t $seconds
 	sleep 1;
+	print_progress $((t+1)) $seconds
 done
 echo
 say напоминание, чай заварился. && tput bel
