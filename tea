@@ -12,7 +12,7 @@ print_progress () {
 	echo -ne '  progress: [';
 	repeat "#" $progress;
 	repeat " " $((50-progress));
-	echo -ne '] T-'$remM':'`printf "%02d" $remS`'\r';
+	echo -ne '] T-'$remM':'`printf "%02d" $remS`'    \r';
 }
 
 parsedtime=`echo "$1" | awk '{split($0,a,":"); print a[1],a[2],0}'`
